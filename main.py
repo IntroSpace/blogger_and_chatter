@@ -23,6 +23,14 @@ def get_services(current_pos):
     return services
 
 
+def get_all_info(current_pos):
+    params = {
+        'services': get_services(current_pos),
+        'avatar': 'avatar/vk_avatar.jpg'
+    }
+    return params
+
+
 @app.route('/')
 @app.route('/index')
 @app.route('/blogs')
@@ -67,17 +75,32 @@ def index():
             'liked': True
         }
     ]
-    return render_template('index.html', blogs=all_blogs, services=get_services(0))
+    return render_template('index.html', blogs=all_blogs, **get_all_info(0))
 
 
 @app.route('/chats')
 def chats():
-    return render_template('chats.html', services=get_services(1))
+    return render_template('chats.html', **get_all_info(1))
 
 
 @app.route('/tasks')
 def tasks():
-    return render_template('tasks.html', services=get_services(2))
+    return render_template('tasks.html', **get_all_info(2))
+
+
+@app.route('/profile')
+def personal_profile():
+    user = {
+        'id': 1,
+        'name': 'Creator'
+    }
+    return render_template('profile.html', **get_all_info(-1), user=user)
+
+
+@app.route('/avatar/<name>')
+def get_profile_avatar(name):
+    from flask import send_file
+    return send_file(f'static/img/avatars/{name}', mimetype='image/gif')
 
 
 if __name__ == '__main__':
