@@ -1,19 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-  <div class="row row-cols-4">
-        <div class="col card">Колонка</div>
-        <div class="col card">Колонка</div>
-        <div class="col card">Колонка еще больше аааараоавыаырашуыьнкшсыуащышуафочу
-            рафчлцуалщщфсьцрфщавыожяащдшкугчщоьцшщзокыгцшчйляыцщов3рв
-            чщкр3цй7цьрсгьчбврв3щябоывц9й8лгяу23901</div>
-        <div class="col card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+<div class="container-fluid mt-2">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+      {% for blog in blogs %}
+        <div class="col card shadow-sm p-0 border border-2 mb-1">
+            <div class="card-header">
+                <h5 card="card-title">
+                    <img style="width: 8%;" src="{{ blog.avatar }}" alt="..." class="rounded-circle me-1">
+                    {{ blog.text }}
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <img src="{{ blog.visual_content }}" alt="image of post" class="card-img">
+            </div>
+            <div class="card-footer">
+                <a href="#">
+                    <img style="width: 3%;"
+                         src="{% if blog.liked %}https://cdn-icons-png.flaticon.com/512/2107/2107774.png
+                              {% else %}https://cdn-icons-png.flaticon.com/512/2107/2107952.png{% endif %}"
+                         alt="Like" class="me-1">
+                </a>
             </div>
         </div>
+      {% endfor %}
   </div>
 </div>
 {% endblock %}
