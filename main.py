@@ -1,4 +1,7 @@
+from random import randint
+
 from flask import Flask, render_template
+from werkzeug.exceptions import abort
 
 app = Flask(__name__)
 
@@ -26,15 +29,12 @@ def get_services(current_pos):
 def get_all_info(current_pos):
     params = {
         'services': get_services(current_pos),
-        'avatar': 'avatar/vk_avatar.jpg'
+        'avatar': 'vk_avatar.jpg'
     }
     return params
 
 
-@app.route('/')
-@app.route('/index')
-@app.route('/blogs')
-def index():
+def get_all_blogs():
     all_blogs = [
         {
             'id': 1,
@@ -82,7 +82,31 @@ def index():
             'liked': True
         }
     ]
+    return all_blogs
+
+
+def get_one_blog(_id):
+    all_blogs = get_all_blogs()
+    if 0 < _id <= len(all_blogs):
+        return all_blogs[_id - 1]
+    abort(404)
+
+
+@app.route('/')
+@app.route('/index')
+@app.route('/blogs')
+def index():
+    all_blogs = get_all_blogs()
     return render_template('index.html', blogs=all_blogs, **get_all_info(0))
+
+
+@app.route('/blog/<int:blog_id>')
+def one_blog(blog_id):
+    cur_blog = get_one_blog(blog_id)
+    all_blogs = get_all_blogs()
+    begin_ind = randint(0, len(all_blogs) - 2)
+    end_ind = randint(begin_ind + 1, len(all_blogs) - 1)
+    return render_template('one_blog.html', blog=cur_blog, recommend=all_blogs[begin_ind:end_ind], **get_all_info(0))
 
 
 @app.route('/chats')

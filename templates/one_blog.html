@@ -16,10 +16,9 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-2">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gy-1">
-      {% for blog in blogs %}
-        <div class="col card shadow-sm p-0 border border-2">
+<div class="container mt-2">
+  <div class="row row-cols-4">
+        <div class="col-5 card shadow-sm p-0 border border-2 h-50">
             <div class="card-header">
                 <h5 card="card-title" style="margin-bottom: 0;">
                     <img style="width: 2rem;" src="{{ blog.avatar }}" alt="..." class="rounded-circle me-1">
@@ -38,7 +37,32 @@
                 </a>
             </div>
         </div>
-      {% endfor %}
+      <div class="col-6 border border-1 ms-3">
+          <h3 align="center">Recommendations</h3>
+          <ul class="list-group">
+              {% for i in recommend %}
+              <li class="list-group-item card shadow-sm p-0 border border-1">
+                  <div class="card-header">
+                      <h5 card="card-title" style="margin-bottom: 0;">
+                          <img style="width: 2rem;" src="{{ i.avatar }}" alt="..." class="rounded-circle me-1">
+                          {{ i.text }}
+                      </h5>
+                  </div>
+                  <div class="card-body p-0">
+                      <img src="{{ i.visual_content }}" alt="image of post" class="card-img">
+                  </div>
+                  <div class="card-footer">
+                      <a onclick="changeLikedOfBlog({{ i.id }})">
+                          <img style="width: 1rem;"
+                               src="{% if i.liked %}https://cdn-icons-png.flaticon.com/512/2107/2107774.png
+                                     {% else %}https://cdn-icons-png.flaticon.com/512/2107/2107952.png{% endif %}"
+                               alt="Like" class="me-1 like-img" id="like-img-{{ i.id }}" liked="{{ i.liked }}">
+                      </a>
+                  </div>
+              </li>
+              {% endfor %}
+          </ul>
+      </div>
   </div>
 </div>
 {% endblock %}
