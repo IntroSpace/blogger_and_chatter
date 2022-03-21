@@ -2,11 +2,11 @@
 
 {% block content %}
 <div class="container-fluid mt-2">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gy-1">
       {% for blog in blogs %}
-        <div class="col card shadow-sm p-0 border border-2 mb-1">
+        <div class="col card shadow-sm p-0 border border-2">
             <div class="card-header">
-                <h5 card="card-title">
+                <h5 card="card-title" style="margin-bottom: 0;">
                     <img style="width: 2rem;" src="{{ blog.avatar }}" alt="..." class="rounded-circle me-1">
                     {{ blog.text }}
                 </h5>

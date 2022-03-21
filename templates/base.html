@@ -18,16 +18,17 @@
                     {% for service in services %}
                         <li>
                             <a {% if service.cur %} bold {% endif %}
-                               class="nav-item {% if service.cur %} navbar-brand head-name ps-2 pe-2 {% else %}
-                               nav-link {% endif %} {% if loop.first %} ps-4 {% endif %}"
+                               style="font-size: {% if service.cur %}1.35rem{% else %}0.97rem{% endif %};"
+                               class="nav-item {% if service.cur %} navbar-brand head-name ps-0 ps-md-1 ps-lg-2 pe-0 pe-md-1 pe-lg-2 me-1 me-lg-2 {% else %}
+                               nav-link {% endif %} {% if loop.first %} ps-1 ps-md-2 ps-lg-4 {% else %} ps-0 ps-md-1 ps-lg-2 {% endif %}"
                                href="{{ service.url }}">{{ service.name }}</a>
                         </li>
                     {% endfor %}
                 </ul>
             </div>
             <div class="header-right">
-                <a class="nav-link me-0 me-md-1 me-lg-2" href="profile">
-                    <img src="{{ avatar }}" alt="user" style="width: 4rem;" class="img-responsive rounded-circle float-end">
+                <a class="nav-link me-0 me-md-1 me-lg-2 ps-1 ps-lg-2" href="profile">
+                    <img src="{{ avatar }}" alt="user" style="width: 3.4rem;" class="img-responsive rounded-circle float-end">
                 </a>
             </div>
         </nav>
