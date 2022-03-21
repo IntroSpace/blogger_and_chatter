@@ -1,5 +1,20 @@
 {% extends "base.html" %}
 
+{% block head_html %}
+<script>
+    function changeLikedOfBlog(i) {
+        cur_blog = document.getElementById("like-img-" + i);
+        if (cur_blog.getAttribute('liked') == "True") {
+            cur_blog.src = "https://cdn-icons-png.flaticon.com/512/2107/2107952.png";
+            cur_blog.setAttribute("liked", "False");
+        } else {
+            cur_blog.src = "https://cdn-icons-png.flaticon.com/512/2107/2107774.png";
+            cur_blog.setAttribute("liked", "True");
+        }
+    }
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid mt-2">
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gy-1">
@@ -15,11 +30,11 @@
                 <img src="{{ blog.visual_content }}" alt="image of post" class="card-img">
             </div>
             <div class="card-footer">
-                <a href="#">
+                <a href="#" onclick="changeLikedOfBlog({{ blog.id }})">
                     <img style="width: 1rem;"
                          src="{% if blog.liked %}https://cdn-icons-png.flaticon.com/512/2107/2107774.png
                               {% else %}https://cdn-icons-png.flaticon.com/512/2107/2107952.png{% endif %}"
-                         alt="Like" class="me-1">
+                         alt="Like" class="me-1 like-img" id="like-img-{{ blog.id }}" liked="{{ blog.liked }}">
                 </a>
             </div>
         </div>
