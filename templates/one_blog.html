@@ -37,11 +37,11 @@
                 </a>
             </div>
         </div>
-      <div class="col-12 col-md-6 border border-1 ms-md-3 mt-2 mt-md-0">
+      <div class="col-12 col-md-6 border border-1 ms-md-3 mt-2 mt-md-0 mb-2 mb-md-3">
           <h3 align="center" class="mt-2">Recommendations</h3>
-          <ul class="list-group">
+          <ul class="list-group mb-0 mb-md-1">
               {% for i in recommend %}
-              <li class="list-group-item card shadow-sm p-0 border border-1" onclick="onclickListener('{{i.id}}');">
+              <li class="list-group-item card shadow-sm p-0 border border-1 mb-1" onclick="onclickListener('{{i.id}}');">
                   <div class="card-header">
                       <h5 card="card-title" style="margin-bottom: 0;">
                           <img style="width: 2rem;" src="{{ i.avatar }}" alt="..." class="rounded-circle me-1 other-click">

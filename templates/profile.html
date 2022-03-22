@@ -4,7 +4,7 @@
 <div class="container-fluid mt-2" align="center">
       <div class="col-12 col-md-10 col-lg-8 card shadow-sm p-0 border border-2">
           <div class="card-header">
-              <h5 card="card-title" style="margin-bottom: 0;">
+              <h5 card="card-title" class="float-start" style="margin-bottom: 0;">
                   <img style="width: 3rem;" src="/avatar/{{ avatar }}" alt="..." class="rounded-circle me-1 other-click">
                   {{user.surname}} {{ user.name }}
               </h5>
@@ -13,14 +13,45 @@
             <div class="card-text">
               <figure>
                   <blockquote class="blockquote">
-                      <p>{{ user.description }}</p>
+                      <p>{{ quote.text }}</p>
                   </blockquote>
                   <figcaption class="blockquote-footer">
-                      User <cite title="Source Title">{{user.surname}} {{ user.name }}</cite>
+                      User <cite title="Source Title">{{quote.surname}} {{ quote.name }}</cite>
                   </figcaption>
               </figure>
+                <a href="#">All quotes</a>
             </div>
           </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="border border-1 ms-md-3 mt-2 mt-md-0">
+                  <h3 align="center" class="mt-2">User Blogs</h3>
+                  <div class="container row row-cols-1 row-cols-md-2 row-cols-lg-3 gy-1 mb-1 mb-md-2">
+                      {% for i in recommend %}
+                      <div class="col card shadow-sm p-0 border border-1" onclick="onclickListener('{{i.id}}');">
+                          <div class="card-header">
+                              <h5 card="card-title" style="margin-bottom: 0;">
+                                  <img style="width: 2rem;" src="{{ i.avatar }}" alt="..." class="rounded-circle me-1 other-click">
+                                  {{ i.text }}
+                              </h5>
+                          </div>
+                          <div class="card-body p-0">
+                              <img src="{{ i.visual_content }}" alt="image of post" class="card-img">
+                          </div>
+                          <div class="card-footer">
+                              <a onclick="changeLikedOfBlog({{ i.id }})" class="other-click float-start">
+                                  <img style="width: 1rem;"
+                                       src="{% if i.liked %}https://cdn-icons-png.flaticon.com/512/2107/2107774.png
+                                             {% else %}https://cdn-icons-png.flaticon.com/512/2107/2107952.png{% endif %}"
+                                       alt="Like" class="me-1 like-img other-click" id="like-img-{{ i.id }}" liked="{{ i.liked }}">
+                              </a>
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+                </div>
+            </li>
+          </ul>
       </div>
   </div>
 </div>
