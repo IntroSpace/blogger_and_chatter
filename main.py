@@ -123,7 +123,9 @@ def tasks():
 def personal_profile():
     user = {
         'id': 1,
-        'name': 'Creator'
+        'name': 'Creator',
+        'surname': 'Diamond',
+        'description': 'This app is my :) hehe'
     }
     return render_template('profile.html', **get_all_info(-1), user=user)
 

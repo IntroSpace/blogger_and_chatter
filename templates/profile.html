@@ -1,7 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid mt-2">
-  User {{ user.id }} named: {{ user.name }} :)
+<div class="container-fluid mt-2" align="center">
+      <div class="col-12 col-md-10 col-lg-8 card shadow-sm p-0 border border-2">
+          <div class="card-header">
+              <h5 card="card-title" style="margin-bottom: 0;">
+                  <img style="width: 3rem;" src="/avatar/{{ avatar }}" alt="..." class="rounded-circle me-1 other-click">
+                  {{user.surname}} {{ user.name }}
+              </h5>
+          </div>
+          <div class="card-body p-2">
+            <div class="card-text">
+              <figure>
+                  <blockquote class="blockquote">
+                      <p>{{ user.description }}</p>
+                  </blockquote>
+                  <figcaption class="blockquote-footer">
+                      User <cite title="Source Title">{{user.surname}} {{ user.name }}</cite>
+                  </figcaption>
+              </figure>
+            </div>
+          </div>
+      </div>
+  </div>
 </div>
 {% endblock %}
