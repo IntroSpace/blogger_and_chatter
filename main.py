@@ -2,8 +2,12 @@ from random import randint, sample
 
 from flask import Flask, render_template
 from werkzeug.exceptions import abort
+from werkzeug.utils import redirect
+
+from forms.loginform import LoginForm
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'diamond_app_socialnet_blogger'
 
 
 def get_services(current_pos):
@@ -141,6 +145,22 @@ def personal_profile():
 def get_profile_avatar(name):
     from flask import send_file
     return send_file(f'static/img/avatars/{name}', mimetype='image/gif')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        return redirect(f'/success/{form.data.get("username")}')
+    return render_template('login.html', title='Авторизация', form=form, **get_all_info(-1))
+
+
+@app.route('/success/<username>')
+def success_login_page(username):
+    user = {
+        'username': username
+    }
+    return render_template('success_login.html', user=user, **get_all_info(0))
 
 
 if __name__ == '__main__':

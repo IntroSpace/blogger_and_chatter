@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-5 d-flex justify-content-center">
+    <div class="col-8 border border-1 p-1">
+        <h1 align="center">Авторизация</h1>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p class="mb-0">
+                {{ form.username.label(class="ms-1") }}<br>
+                {{ form.username(class="form-control") }}<br>
+                {% for error in form.username.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endfor %}
+            </p>
+            <p class="mb-0">
+                {{ form.password.label(class="ms-1") }}<br>
+                {{ form.password(class="form-control", type="password") }}<br>
+                {% for error in form.password.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endfor %}
+            </p>
+            <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+            <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        </form>
+    </div>
+</div>
+{% endblock %}
