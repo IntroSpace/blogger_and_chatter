@@ -18,10 +18,10 @@
 {% block content %}
 <div class="container mt-2">
   <div class="row row-cols-4">
-        <div class="col-5 card shadow-sm p-0 border border-2 h-50">
+        <div class="col-12 col-md-5 card shadow-sm p-0 border border-2 h-50">
             <div class="card-header">
                 <h5 card="card-title" style="margin-bottom: 0;">
-                    <img style="width: 2rem;" src="{{ blog.avatar }}" alt="..." class="rounded-circle me-1">
+                    <img style="width: 2rem;" src="{{ blog.avatar }}" alt="..." class="rounded-circle me-1 other-click">
                     {{ blog.text }}
                 </h5>
             </div>
@@ -29,22 +29,22 @@
                 <img src="{{ blog.visual_content }}" alt="image of post" class="card-img">
             </div>
             <div class="card-footer">
-                <a onclick="changeLikedOfBlog({{ blog.id }})">
+                <a onclick="changeLikedOfBlog({{ blog.id }})" class="other-click">
                     <img style="width: 1rem;"
                          src="{% if blog.liked %}https://cdn-icons-png.flaticon.com/512/2107/2107774.png
                               {% else %}https://cdn-icons-png.flaticon.com/512/2107/2107952.png{% endif %}"
-                         alt="Like" class="me-1 like-img" id="like-img-{{ blog.id }}" liked="{{ blog.liked }}">
+                         alt="Like" class="me-1 like-img other-click" id="like-img-{{ blog.id }}" liked="{{ blog.liked }}">
                 </a>
             </div>
         </div>
-      <div class="col-6 border border-1 ms-3">
+      <div class="col-12 col-md-6 border border-1 ms-md-3 mt-2 mt-md-0">
           <h3 align="center">Recommendations</h3>
           <ul class="list-group">
               {% for i in recommend %}
-              <li class="list-group-item card shadow-sm p-0 border border-1">
+              <li class="list-group-item card shadow-sm p-0 border border-1" onclick="onclickListener('{{i.id}}');">
                   <div class="card-header">
                       <h5 card="card-title" style="margin-bottom: 0;">
-                          <img style="width: 2rem;" src="{{ i.avatar }}" alt="..." class="rounded-circle me-1">
+                          <img style="width: 2rem;" src="{{ i.avatar }}" alt="..." class="rounded-circle me-1 other-click">
                           {{ i.text }}
                       </h5>
                   </div>
@@ -52,11 +52,11 @@
                       <img src="{{ i.visual_content }}" alt="image of post" class="card-img">
                   </div>
                   <div class="card-footer">
-                      <a onclick="changeLikedOfBlog({{ i.id }})">
+                      <a onclick="changeLikedOfBlog({{ i.id }})" class="other-click">
                           <img style="width: 1rem;"
                                src="{% if i.liked %}https://cdn-icons-png.flaticon.com/512/2107/2107774.png
                                      {% else %}https://cdn-icons-png.flaticon.com/512/2107/2107952.png{% endif %}"
-                               alt="Like" class="me-1 like-img" id="like-img-{{ i.id }}" liked="{{ i.liked }}">
+                               alt="Like" class="me-1 like-img other-click" id="like-img-{{ i.id }}" liked="{{ i.liked }}">
                       </a>
                   </div>
               </li>

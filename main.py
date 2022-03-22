@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, sample
 
 from flask import Flask, render_template
 from werkzeug.exceptions import abort
@@ -34,7 +34,7 @@ def get_all_info(current_pos):
     return params
 
 
-def get_all_blogs():
+def get_all_blogs(extra_blog=None):
     all_blogs = [
         {
             'id': 1,
@@ -82,6 +82,8 @@ def get_all_blogs():
             'liked': True
         }
     ]
+    if extra_blog is not None:
+        all_blogs = list(filter(lambda x: x.get('id', -1) != extra_blog, all_blogs))
     return all_blogs
 
 
@@ -103,10 +105,8 @@ def index():
 @app.route('/blog/<int:blog_id>')
 def one_blog(blog_id):
     cur_blog = get_one_blog(blog_id)
-    all_blogs = get_all_blogs()
-    begin_ind = randint(0, len(all_blogs) - 2)
-    end_ind = randint(begin_ind + 1, len(all_blogs) - 1)
-    return render_template('one_blog.html', blog=cur_blog, recommend=all_blogs[begin_ind:end_ind], **get_all_info(0))
+    all_blogs = get_all_blogs(extra_blog=blog_id)
+    return render_template('one_blog.html', blog=cur_blog, recommend=sample(all_blogs, randint(1, 3)), **get_all_info(0))
 
 
 @app.route('/chats')
