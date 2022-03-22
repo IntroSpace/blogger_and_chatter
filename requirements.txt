@@ -5,3 +5,4 @@ click~=8.0.4
 itsdangerous~=2.1.1
 Flask~=2.0.3
 sqlalchemy
+flask_wtf
