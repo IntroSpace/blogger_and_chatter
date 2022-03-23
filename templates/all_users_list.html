@@ -13,6 +13,6 @@
             Email - {{ item.email|hide_email }}, {% if item.about %}Описание - {{item.about}}{% else %}Описания нет{% endif %}
         </div>
     </div>
+    {% endfor %}
 </div>
-{% endfor %}
 {% endblock %}
