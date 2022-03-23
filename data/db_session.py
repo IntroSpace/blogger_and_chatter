@@ -16,14 +16,10 @@ def global_init():
     if __factory:
         return
 
-    # if not db_file or not db_file.strip():
-    #     raise Exception("Необходимо указать файл базы данных.")
-
-    # conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
     try:
         conn_str = os.environ.get('DATABASE_URL').replace('postgres://', 'postgresql://')
     except Exception:
-        raise ConnectionError('DB don\'t work')
+        conn_str = f'sqlite:///db/social_net.db?check_same_thread=False'
     print(f"Подключение к базе данных по адресу {conn_str}")
 
     engine = sa.create_engine(conn_str, echo=False)

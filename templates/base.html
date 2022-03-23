@@ -29,9 +29,15 @@
                 </ul>
             </div>
             <div class="header-right">
-                <a class="nav-link me-0 me-md-1 me-lg-2 ps-1 ps-lg-2" href="/profile">
-                    <img src="/avatar/{{ avatar }}" alt="user" style="width: 3.4rem;" class="img-responsive rounded-circle float-end">
-                </a>
+                {% if current_user.is_authenticated %}
+                    <a class="nav-link me-0 me-md-1 me-lg-2 ps-1 ps-lg-2" href="/profile">
+                        <img src="/avatar/{{ avatar }}" alt="user" style="width: 3.4rem;" class="img-responsive rounded-circle float-end">
+                    </a>
+                {% else %}
+                    <p class="me-2 mb-auto">
+                        <a class="btn btn-secondary" href="/login">Войти</a>
+                    </p>
+                {% endif %}
             </div>
         </nav>
     </header>

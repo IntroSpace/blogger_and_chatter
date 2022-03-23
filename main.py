@@ -41,7 +41,10 @@ def get_services(current_pos):
 def get_all_info(current_pos):
     params = {
         'services': get_services(current_pos),
-        'avatar': 'vk_avatar.jpg'
+        'avatar': 'vk_avatar.jpg',
+        'current_user': {
+            'is_authenticated': False
+        }
     }
     return params
 
