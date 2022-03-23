@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid" align="center">
+    <h1>Пользователи нашего сервиса</h1>
+    {% for item in all_users%}
+    <div class="col-12 col-md-10 col-lg-9 border rounded">
+        <h2>{{item.username}}</h2>
+        <div>
+            {% if item.surname %}{{item.surname}} {% endif %}{{item.name}}
+        </div>
+        <div>
+            Email - {{ item.email|hide_email }}, {% if item.about %}Описание - {{item.about}}{% else %}Описания нет{% endif %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

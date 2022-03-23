@@ -13,6 +13,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'diamond_app_socialnet_blogger'
 
 
+@app.template_filter('hide_email')
+def hide_email(email):
+    return f"{email[0]}...@{email.split('@')[-1]}"
+
+
 def get_services(current_pos):
     services = [
         {
@@ -181,17 +186,30 @@ def reqister():
                                    form=form,
                                    message="Такой пользователь уже есть",
                                    **get_all_info(-1))
+        if db_sess.query(User).filter(User.username == form.username.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Пользователь с таким сокращенным именем уже есть",
+                                   **get_all_info(-1))
         user = User(
             name=form.name.data,
             surname=form.surname.data,
+            username=form.username.data,
             email=form.email.data,
             about=form.about.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
+        return redirect('/users_list')
     return render_template('register.html', title='Регистрация', form=form, **get_all_info(-1))
+
+
+@app.route("/users_list")
+def all_users_list():
+    db_sess = db_session.create_session()
+    users = db_sess.query(User).filter()
+    return render_template('all_users_list.html', title='Список пользователей', all_users=users, **get_all_info(-1))
 
 
 if __name__ == '__main__':
