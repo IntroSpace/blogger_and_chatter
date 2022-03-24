@@ -7,3 +7,4 @@ Flask~=2.0.3
 sqlalchemy
 flask_wtf
 psycopg2-binary
+flask-login

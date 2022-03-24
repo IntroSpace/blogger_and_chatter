@@ -6,20 +6,20 @@
           <div class="card-header">
               <h5 card="card-title" class="float-start" style="margin-bottom: 0;">
                   <img style="width: 3rem;" src="/avatar/{{ avatar }}" alt="..." class="rounded-circle me-1 other-click">
-                  {{user.surname}} {{ user.name }}
+                  {{current_user.surname}} {{ current_user.name }}
               </h5>
+              <a href="/logout" class="text-decoration-none float-end h6">Log out</a>
           </div>
           <div class="card-body p-2">
             <div class="card-text">
               <figure>
                   <blockquote class="blockquote">
-                      <p>{{ quote.text }}</p>
+                      <p>{{ current_user.about }}</p>
                   </blockquote>
                   <figcaption class="blockquote-footer">
-                      User <cite title="Source Title">{{quote.surname}} {{ quote.name }}</cite>
+                      User <cite title="Source Title">{{current_user.surname}} {{ current_user.name }}</cite>
                   </figcaption>
               </figure>
-                <a href="#">All quotes</a>
             </div>
           </div>
           <ul class="list-group list-group-flush">

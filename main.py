@@ -1,6 +1,7 @@
 from random import randint, sample
 
 from flask import Flask, render_template
+from flask_login import LoginManager, login_user, login_required, logout_user
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
 
@@ -11,6 +12,15 @@ from forms.registerform import RegisterForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'diamond_app_socialnet_blogger'
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 
 @app.template_filter('hide_email')
@@ -41,10 +51,7 @@ def get_services(current_pos):
 def get_all_info(current_pos):
     params = {
         'services': get_services(current_pos),
-        'avatar': 'vk_avatar.jpg',
-        'current_user': {
-            'is_authenticated': False
-        }
+        'avatar': 'vk_avatar.jpg'
     }
     return params
 
@@ -135,21 +142,10 @@ def tasks():
 
 
 @app.route('/profile')
+@login_required
 def personal_profile():
-    params = {
-        'user': {
-            'id': 1,
-            'name': 'Creator',
-            'surname': 'Diamond'
-        },
-        'quote': {
-            'name': 'Creator',
-            'surname': 'Diamond',
-            'text': 'This app is my :) hehe'
-        }
-    }
     all_blogs = get_all_blogs()
-    return render_template('profile.html', **get_all_info(-1), **params, recommend=sample(all_blogs, randint(1, 3)))
+    return render_template('profile.html', **get_all_info(-1), recommend=sample(all_blogs, randint(1, 3)))
 
 
 @app.route('/avatar/<name>')
@@ -158,20 +154,44 @@ def get_profile_avatar(name):
     return send_file(f'static/img/avatars/{name}', mimetype='image/gif')
 
 
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         return redirect(f'/success/{form.data.get("username")}')
+#     return render_template('login.html', title='Авторизация', form=form, **get_all_info(-1))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        return redirect(f'/success/{form.data.get("username")}')
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect(f'/success/{form.data.get("username")}')
+        user = db_sess.query(User).filter(User.username == form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect(f'/success')
+        return render_template('login.html',
+                               message="Неправильный логин или пароль",
+                               form=form,
+                               **get_all_info(-1))
     return render_template('login.html', title='Авторизация', form=form, **get_all_info(-1))
 
 
-@app.route('/success/<username>')
-def success_login_page(username):
-    user = {
-        'username': username
-    }
-    return render_template('success_login.html', user=user, **get_all_info(-1))
+@app.route('/success')
+def success_login_page():
+    return render_template('success_login.html', **get_all_info(-1))
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
 
 
 @app.route('/register', methods=['GET', 'POST'])
