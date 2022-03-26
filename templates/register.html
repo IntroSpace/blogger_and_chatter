@@ -4,7 +4,7 @@
 <div class="container-fluid mt-5 d-flex justify-content-center">
     <div class="col-8 border border-1 p-1">
         <h1 align="center">Регистрация</h1>
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <p class="mb-0">
                 {{ form.email.label(class="ms-1") }} <a class="text-decoration-none text-danger">*</a><br>
@@ -70,10 +70,11 @@
                 {% endfor %}
             </p>
             <p>
+                {{ form.avatar() }}
+            </p>
+            <p>
                 {{ form.submit(type="submit", class="btn btn-primary") }}
-                {% if message %}
-                    <a class="h5 text-decoration-none text-danger align-middle ms-2">{{message}}</a>
-                {% endif %}
+                <a class="h5 text-decoration-none text-danger align-middle ms-2">{{message}}</a>
             </p>
 
         </form>

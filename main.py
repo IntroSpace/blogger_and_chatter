@@ -1,9 +1,10 @@
+import os
 from random import randint, sample
 
 from flask import Flask, render_template
 from flask_login import LoginManager, login_user, login_required, logout_user
 from werkzeug.exceptions import abort
-from werkzeug.utils import redirect
+from werkzeug.utils import redirect, secure_filename
 
 from data import db_session
 from data.users import User
@@ -151,7 +152,10 @@ def personal_profile():
 @app.route('/avatar/<name>')
 def get_profile_avatar(name):
     from flask import send_file
-    return send_file(f'static/img/avatars/{name}', mimetype='image/gif')
+    if not os.path.exists(f'static/img/avatars/avatar_of_{name}.png'):
+        with open(f'static/img/avatars/avatar_of_{name}.png', 'wb') as file:
+            file.write(load_user(name).avatar)
+    return send_file(f'static/img/avatars/avatar_of_{name}.png', mimetype='image/gif')
 
 
 # @app.route('/login', methods=['GET', 'POST'])
@@ -198,22 +202,26 @@ def logout():
 def reqister():
     form = RegisterForm()
     if form.validate_on_submit():
+        print('checked')
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают",
                                    **get_all_info(-1))
+        print('checked')
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть",
                                    **get_all_info(-1))
+        print('checked')
         if db_sess.query(User).filter(User.username == form.username.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пользователь с таким сокращенным именем уже есть",
                                    **get_all_info(-1))
+        print('checked')
         user = User(
             name=form.name.data,
             surname=form.surname.data,
@@ -221,6 +229,13 @@ def reqister():
             email=form.email.data,
             about=form.about.data
         )
+        print('checked')
+        print(form.avatar.data)
+        filename = secure_filename(form.avatar.data.filename)
+        print('checked')
+        form.avatar.data.save(os.path.join('static/img/avatars', filename))
+        print('checked')
+        user.generate_blob(filename)
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
