@@ -12,7 +12,7 @@ class User(SqlAlchemyBase, UserMixin):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    avatar = sqlalchemy.Column(sqlalchemy.BINARY, nullable=True)
+    avatar = sqlalchemy.Column(sqlalchemy.LargeBinary, nullable=True)
     username = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     surname = sqlalchemy.Column(sqlalchemy.String, nullable=True)

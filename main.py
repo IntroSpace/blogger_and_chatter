@@ -152,9 +152,8 @@ def personal_profile():
 @app.route('/avatar/<name>')
 def get_profile_avatar(name):
     from flask import send_file
-    if not os.path.exists(f'static/img/avatars/avatar_of_{name}.png'):
-        with open(f'static/img/avatars/avatar_of_{name}.png', 'wb') as file:
-            file.write(load_user(name).avatar)
+    with open(f'static/img/avatars/avatar_of_{name}.png', 'wb') as file:
+        file.write(load_user(name).avatar)
     return send_file(f'static/img/avatars/avatar_of_{name}.png', mimetype='image/gif')
 
 
