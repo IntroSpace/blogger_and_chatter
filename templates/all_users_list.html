@@ -5,7 +5,10 @@
     <h1>Пользователи нашего сервиса</h1>
     {% for item in all_users%}
     <div class="col-12 col-md-10 col-lg-9 border rounded">
-        <h2>{{item.username}}</h2>
+        <h2>
+            <img style="width: 2rem;" src="/avatar/{{ item.id }}" alt="..." class="rounded-circle me-1 other-click">
+            {{item.username}}
+        </h2>
         <div>
             {% if item.surname %}{{item.surname}} {% endif %}{{item.name}}
         </div>
