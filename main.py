@@ -1,14 +1,16 @@
 import os
 from random import randint, sample
 
-from flask import Flask, render_template
-from flask_login import LoginManager, login_user, login_required, logout_user
+from flask import Flask, render_template, session
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect, secure_filename
 
 from data import db_session
+from data.posts import Post
 from data.users import User
 from forms.loginform import LoginForm
+from forms.newpostform import NewPostForm
 from forms.registerform import RegisterForm
 
 app = Flask(__name__)
@@ -122,14 +124,15 @@ def get_one_blog(_id):
 @app.route('/blogs')
 def index():
     all_blogs = get_all_blogs()
-    return render_template('index.html', blogs=all_blogs, **get_all_info(0))
+    return render_template('index.html', blogs=all_blogs, **get_all_info(0), current_user=current_user)
 
 
 @app.route('/blog/<int:blog_id>')
 def one_blog(blog_id):
     cur_blog = get_one_blog(blog_id)
     all_blogs = get_all_blogs(extra_blog=blog_id)
-    return render_template('one_blog.html', blog=cur_blog, recommend=sample(all_blogs, randint(1, 3)), **get_all_info(0))
+    return render_template('one_blog.html', blog=cur_blog, recommend=sample(all_blogs, randint(1, 3)),
+                           **get_all_info(0))
 
 
 @app.route('/chats')
@@ -145,6 +148,9 @@ def tasks():
 @app.route('/profile')
 @login_required
 def personal_profile():
+    # db_sess = db_session.create_session()
+    # all_blogs = db_sess.query(Post).filter(Post.user_id == current_user.id)
+    # return render_template('profile.html', **get_all_info(-1), recommend=all_blogs)
     all_blogs = get_all_blogs()
     return render_template('profile.html', **get_all_info(-1), recommend=sample(all_blogs, randint(1, 3)))
 
@@ -248,6 +254,20 @@ def all_users_list():
     users = db_sess.query(User).filter()
     return render_template('all_users_list.html', title='Список пользователей', all_users=users, **get_all_info(-1))
 
+@login_required
+@app.route('/new_post', methods=['GET', 'POST'])
+def new_post():
+    db_sess = db_session.create_session()
+    form = NewPostForm()
+    if form.validate_on_submit():
+        post = Post(text=form.text.data, user_id=current_user.id)
+        filename = secure_filename(form.file.data.filename)
+        form.file.data.save(os.path.join('static/img/posts', filename))
+        post.generate_blob(filename)
+        db_sess.add(post)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('new_post.html', form=form)
 
 if __name__ == '__main__':
     db_session.global_init()

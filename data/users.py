@@ -3,6 +3,7 @@ import os
 
 import sqlalchemy
 from flask_login import UserMixin
+from sqlalchemy import orm
 from werkzeug.security import generate_password_hash, check_password_hash
 from .db_session import SqlAlchemyBase
 
@@ -22,6 +23,7 @@ class User(SqlAlchemyBase, UserMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
+    post = orm.relation("Post", back_populates='user')
 
     def generate_blob(self, img):
         with open(os.path.join('static/img/avatars', img), 'rb') as image:
