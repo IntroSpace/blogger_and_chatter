@@ -1,7 +1,7 @@
 import os
 from random import randint, sample
 
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, send_file
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect, secure_filename
@@ -24,6 +24,11 @@ login_manager.init_app(app)
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
+
+
+def load_post_content(post_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(Post).get(post_id)
 
 
 @app.template_filter('hide_email')
@@ -159,10 +164,16 @@ def personal_profile():
 
 @app.route('/avatar/<name>')
 def get_profile_avatar(name):
-    from flask import send_file
     with open(f'static/img/avatars/avatar_of_{name}.png', 'wb') as file:
         file.write(load_user(name).avatar)
     return send_file(f'static/img/avatars/avatar_of_{name}.png', mimetype='image/gif')
+
+
+@app.route('/post_image/<name>')
+def get_post_visual_content(name):
+    with open(f'static/img/posts/image_of_{name}.png', 'wb') as file:
+        file.write(load_post_content(name).visual_content)
+    return send_file(f'static/img/posts/image_of_{name}.png', mimetype='image/gif')
 
 
 # @app.route('/login', methods=['GET', 'POST'])
@@ -180,11 +191,13 @@ def login():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.username.data).first()
         if user and user.check_password(form.password.data):
+            print(2, user.post)
             login_user(user, remember=form.remember_me.data)
-            return redirect(f'/success/{form.data.get("username")}')
+            return redirect(f'/success')
         user = db_sess.query(User).filter(User.username == form.username.data).first()
         if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
+            print(1, user.post)
+            print(login_user(user, remember=form.remember_me.data))
             return redirect(f'/success')
         return render_template('login.html',
                                message="Неправильный логин или пароль",
@@ -256,6 +269,7 @@ def all_users_list():
     users = db_sess.query(User).filter()
     return render_template('all_users_list.html', title='Список пользователей', all_users=users, **get_all_info(-1))
 
+
 @login_required
 @app.route('/new_post', methods=['GET', 'POST'])
 def new_post():
@@ -271,6 +285,7 @@ def new_post():
         db_sess.commit()
         return redirect('/')
     return render_template('new_post.html', form=form)
+
 
 if __name__ == '__main__':
     db_session.global_init()

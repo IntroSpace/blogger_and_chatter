@@ -1,4 +1,5 @@
 import os
+from PIL import Image
 
 import sqlalchemy
 from sqlalchemy import orm
@@ -18,5 +19,8 @@ class Post(SqlAlchemyBase):
     user = orm.relation('User')
 
     def generate_blob(self, img):
+        if not os.path.exists(os.path.join('static/img/posts', img)):
+            return
         with open(os.path.join('static/img/posts', img), 'rb') as image:
             self.visual_content = image.read()
+        os.remove(os.path.join('static/img/posts', img))
