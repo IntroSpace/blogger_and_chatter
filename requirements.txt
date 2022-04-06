@@ -8,3 +8,4 @@ sqlalchemy
 flask_wtf
 psycopg2-binary
 flask-login
+Pillow
