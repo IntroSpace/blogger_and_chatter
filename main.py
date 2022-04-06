@@ -4,6 +4,7 @@ from random import randint, sample
 
 from flask import Flask, render_template, session, send_file, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from sqlalchemy.orm import defer
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect, secure_filename
 
@@ -25,14 +26,12 @@ login_manager.init_app(app)
 def load_user(user_id):
     db_sess = db_session.create_session()
     user = db_sess.query(User).get(user_id)
-    db_sess.close()
     return user
 
 
 def load_post_content(post_id):
     db_sess = db_session.create_session()
     post = db_sess.query(Post).get(post_id)
-    db_sess.close()
     return post
 
 
@@ -44,7 +43,7 @@ def hide_email(email):
 @app.template_filter('check_like_post')
 def check_like_post(liked):
     list_of_liked = liked.split(',')
-    if str(current_user.id) in list_of_liked:
+    if current_user.is_authenticated and str(current_user.id) in list_of_liked:
         return True
     return False
 
@@ -127,7 +126,6 @@ def get_all_blogs(extra_blog=None):
     # ]
     db_sess = db_session.create_session()
     all_blogs = db_sess.query(Post).all()
-    db_sess.close()
     # if extra_blog is not None:
     #     all_blogs = list(filter(lambda x: x.get('id', -1) != extra_blog, all_blogs))
     return all_blogs
@@ -207,10 +205,8 @@ def login():
         if user and user.check_password(form.password.data):
             print(2, user.post)
             login_user(user, remember=form.remember_me.data)
-            db_sess.close()
             return redirect(f'/success')
         user = db_sess.query(User).filter(User.username == form.username.data).first()
-        db_sess.close()
         if user and user.check_password(form.password.data):
             print(1, user.post)
             print(login_user(user, remember=form.remember_me.data))
@@ -245,13 +241,11 @@ def reqister():
                                    **get_all_info(-1))
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
-            db_sess.close()
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть",
                                    **get_all_info(-1))
         if db_sess.query(User).filter(User.username == form.username.data).first():
-            db_sess.close()
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пользователь с таким сокращенным именем уже есть",
@@ -269,7 +263,6 @@ def reqister():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        db_sess.close()
         return redirect('/users_list')
     return render_template('register.html', title='Регистрация', form=form, **get_all_info(-1))
 
@@ -278,7 +271,6 @@ def reqister():
 def all_users_list():
     db_sess = db_session.create_session()
     users = db_sess.query(User).filter()
-    db_sess.close()
     return render_template('all_users_list.html', title='Список пользователей', all_users=users, **get_all_info(-1))
 
 
@@ -296,12 +288,11 @@ def new_post():
         post.generate_blob(filename)
         db_sess.add(post)
         db_sess.commit()
-        db_sess.close()
         return redirect('/')
-    db_sess.close()
     return render_template('new_post.html', form=form)
 
 
+@login_required
 @app.route('/api/blogs/change_like/<post_id>')
 def set_like_for_post(post_id):
     db_sess = db_session.create_session()
@@ -311,15 +302,9 @@ def set_like_for_post(post_id):
         list_of_liked.append(str(current_user.id))
         cur_post.liked = ','.join(list_of_liked)
     db_sess.commit()
-    db_sess.close()
     return jsonify({
         'result': 'success'
     })
-
-
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.__factory.close_all()
 
 
 if __name__ == '__main__':
