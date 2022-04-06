@@ -1,7 +1,7 @@
 import os
 from random import randint, sample
 
-from flask import Flask, render_template, session, send_file
+from flask import Flask, render_template, session, send_file, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect, secure_filename
@@ -34,6 +34,14 @@ def load_post_content(post_id):
 @app.template_filter('hide_email')
 def hide_email(email):
     return f"{email[0]}...@{email.split('@')[-1]}"
+
+
+@app.template_filter('check_like_post')
+def check_like_post(liked):
+    list_of_liked = liked.split(',')
+    if str(current_user.id) in list_of_liked:
+        return True
+    return False
 
 
 def get_services(current_pos):
@@ -222,26 +230,22 @@ def logout():
 def reqister():
     form = RegisterForm()
     if form.validate_on_submit():
-        print('checked')
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают",
                                    **get_all_info(-1))
-        print('checked')
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть",
                                    **get_all_info(-1))
-        print('checked')
         if db_sess.query(User).filter(User.username == form.username.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Пользователь с таким сокращенным именем уже есть",
                                    **get_all_info(-1))
-        print('checked')
         user = User(
             name=form.name.data,
             surname=form.surname.data,
@@ -249,12 +253,8 @@ def reqister():
             email=form.email.data,
             about=form.about.data
         )
-        print('checked')
-        print(form.avatar.data)
         filename = secure_filename(form.avatar.data.filename)
-        print('checked')
         form.avatar.data.save(os.path.join('static/img/avatars', filename))
-        print('checked')
         user.generate_blob(filename)
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -277,7 +277,8 @@ def new_post():
     form = NewPostForm()
     if form.validate_on_submit():
         post = Post(text=form.text.data,
-                    user_id=current_user.id)
+                    user_id=current_user.id,
+                    liked="")
         filename = secure_filename(form.file.data.filename)
         form.file.data.save(os.path.join('static/img/posts', filename))
         post.generate_blob(filename)
@@ -285,6 +286,20 @@ def new_post():
         db_sess.commit()
         return redirect('/')
     return render_template('new_post.html', form=form)
+
+
+@app.route('/api/blogs/change_like/<post_id>')
+def set_like_for_post(post_id):
+    db_sess = db_session.create_session()
+    cur_post = db_sess.query(Post).get(post_id)
+    list_of_liked = cur_post.liked.split(',')
+    if not str(current_user.id) in list_of_liked:
+        list_of_liked.append(str(current_user.id))
+        cur_post.liked = ','.join(list_of_liked)
+    db_sess.commit()
+    return jsonify({
+        'result': 'success'
+    })
 
 
 if __name__ == '__main__':

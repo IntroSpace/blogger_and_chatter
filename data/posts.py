@@ -14,6 +14,7 @@ class Post(SqlAlchemyBase):
                            primary_key=True, autoincrement=True)
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     visual_content = sqlalchemy.Column(sqlalchemy.LargeBinary, nullable=True)
+    liked = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relation('User')

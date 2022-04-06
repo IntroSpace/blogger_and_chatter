@@ -21,7 +21,7 @@
             <div class="card-footer">
                 <a class="other-click" onclick="changeLikedOfBlog({{ blog.id }})">
                     <img style="width: 1rem;"
-                         src="{% if blog.liked %}https://cdn-icons-png.flaticon.com/512/2107/2107774.png
+                         src="{% if blog.liked|check_like_post %}https://cdn-icons-png.flaticon.com/512/2107/2107774.png
                               {% else %}https://cdn-icons-png.flaticon.com/512/2107/2107952.png{% endif %}"
                          alt="Like" class="me-1 like-img other-click" id="like-img-{{ blog.id }}" liked="{{ blog.liked }}">
                 </a>
