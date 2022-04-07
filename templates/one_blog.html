@@ -21,12 +21,12 @@
         <div class="col-12 col-md-5 card shadow-sm p-0 border border-2 h-50">
             <div class="card-header">
                 <h5 card="card-title" style="margin-bottom: 0;">
-                    <img style="width: 2rem;" src="{{ blog.avatar }}" alt="..." class="rounded-circle me-1 other-click">
+                    <img style="width: 2rem;" src="/avatar/{{ blog.user.id }}" alt="..." class="rounded-circle me-1 other-click">
                     {{ blog.text }}
                 </h5>
             </div>
             <div class="card-body p-0">
-                <img src="{{ blog.visual_content }}" alt="image of post" class="card-img">
+                <img src="/post_image/{{ blog.id }}" alt="image of post" class="card-img">
             </div>
             <div class="card-footer">
                 <a onclick="changeLikedOfBlog({{ blog.id }})" class="other-click">
