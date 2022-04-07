@@ -1,10 +1,8 @@
 import os
-import pdb
 from random import randint, sample
 
-from flask import Flask, render_template, session, send_file, jsonify
+from flask import Flask, render_template, send_file, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from sqlalchemy.orm import defer
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect, secure_filename
 
@@ -95,7 +93,8 @@ def get_all_blogs(extra_blog=None):
     #         'id': 3,
     #         'text': 'post 3',
     #         'avatar': 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-    #         'visual_content': 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
+    #         'visual_content': 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMj
+    #         A3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
     #         'liked': False
     #     },
     #     {
@@ -148,8 +147,8 @@ def index():
 @app.route('/blog/<int:blog_id>')
 def one_blog(blog_id):
     cur_blog = get_one_blog(blog_id)
-    all_blogs = get_all_blogs(extra_blog=blog_id)
-    return render_template('one_blog.html', blog=cur_blog, recommend=sample(all_blogs, randint(1, 3)),
+    all_blogs = get_all_blogs(extra_blog=cur_blog)
+    return render_template('one_blog.html', blog=cur_blog, recommend=all_blogs,
                            **get_all_info(0))
 
 
@@ -166,11 +165,10 @@ def tasks():
 @app.route('/profile')
 @login_required
 def personal_profile():
-    # db_sess = db_session.create_session()
-    # all_blogs = db_sess.query(Post).filter(Post.user_id == current_user.id)
-    # return render_template('profile.html', **get_all_info(-1), recommend=all_blogs)
-    all_blogs = get_all_blogs()
-    return render_template('profile.html', **get_all_info(-1), recommend=sample(all_blogs, randint(1, 3)))
+    all_blogs = db_sess.query(Post).filter(Post.user_id == current_user.id)
+    return render_template('profile.html', **get_all_info(-1), recommend=all_blogs)
+    # all_blogs = get_all_blogs()
+    # return render_template('profile.html', **get_all_info(-1), recommend=sample(all_blogs, randint(1, 3)))
 
 
 @app.route('/avatar/<name>')
