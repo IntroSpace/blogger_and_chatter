@@ -23,7 +23,7 @@
                     <img style="width: 1rem;"
                          src="{% if blog.liked|check_like_post %}https://cdn-icons-png.flaticon.com/512/2107/2107774.png
                               {% else %}https://cdn-icons-png.flaticon.com/512/2107/2107952.png{% endif %}"
-                         alt="Like" class="me-1 like-img other-click" id="like-img-{{ blog.id }}" liked="{{ blog.liked }}">
+                         alt="Like" class="me-1 like-img other-click" id="like-img-{{ blog.id }}" liked="{{ blog.liked|check_like_post }}">
                 </a>
             </div>
         </div>

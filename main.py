@@ -21,16 +21,16 @@ app.config['SECRET_KEY'] = 'diamond_app_socialnet_blogger'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+db_sess = None
+
 
 @login_manager.user_loader
 def load_user(user_id):
-    db_sess = db_session.create_session()
     user = db_sess.query(User).get(user_id)
     return user
 
 
 def load_post_content(post_id):
-    db_sess = db_session.create_session()
     post = db_sess.query(Post).get(post_id)
     return post
 
@@ -124,18 +124,17 @@ def get_all_blogs(extra_blog=None):
     #         'liked': True
     #     }
     # ]
-    db_sess = db_session.create_session()
-    all_blogs = db_sess.query(Post).all()
+    if extra_blog is not None:
+        all_blogs = db_sess.query(Post).filter(Post.id != extra_blog.id).all()
+    else:
+        all_blogs = db_sess.query(Post).all()
     # if extra_blog is not None:
     #     all_blogs = list(filter(lambda x: x.get('id', -1) != extra_blog, all_blogs))
     return all_blogs
 
 
 def get_one_blog(_id):
-    all_blogs = get_all_blogs()
-    if 0 < _id <= len(all_blogs):
-        return all_blogs[_id - 1]
-    abort(404)
+    return load_post_content(_id)
 
 
 @app.route('/')
@@ -200,7 +199,6 @@ def get_post_visual_content(name):
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.username.data).first()
         if user and user.check_password(form.password.data):
             print(2, user.post)
@@ -239,7 +237,6 @@ def reqister():
                                    form=form,
                                    message="Пароли не совпадают",
                                    **get_all_info(-1))
-        db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
@@ -269,7 +266,6 @@ def reqister():
 
 @app.route("/users_list")
 def all_users_list():
-    db_sess = db_session.create_session()
     users = db_sess.query(User).filter()
     return render_template('all_users_list.html', title='Список пользователей', all_users=users, **get_all_info(-1))
 
@@ -277,7 +273,6 @@ def all_users_list():
 @login_required
 @app.route('/new_post', methods=['GET', 'POST'])
 def new_post():
-    db_sess = db_session.create_session()
     form = NewPostForm()
     if form.validate_on_submit():
         post = Post(text=form.text.data,
@@ -295,12 +290,13 @@ def new_post():
 @login_required
 @app.route('/api/blogs/change_like/<post_id>')
 def set_like_for_post(post_id):
-    db_sess = db_session.create_session()
     cur_post = db_sess.query(Post).get(post_id)
     list_of_liked = cur_post.liked.split(',')
     if not str(current_user.id) in list_of_liked:
         list_of_liked.append(str(current_user.id))
-        cur_post.liked = ','.join(list_of_liked)
+    else:
+        del list_of_liked[list_of_liked.index(str(current_user.id))]
+    cur_post.liked = ','.join(list_of_liked)
     db_sess.commit()
     return jsonify({
         'result': 'success'
@@ -309,4 +305,5 @@ def set_like_for_post(post_id):
 
 if __name__ == '__main__':
     db_session.global_init()
+    db_sess = db_session.create_session()
     app.run(port=8000, host='127.0.0.1')
