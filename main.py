@@ -154,7 +154,20 @@ def one_blog(blog_id):
 
 @app.route('/chats')
 def chats():
-    return render_template('chats.html', **get_all_info(1))
+    chats = [
+        {
+            'name': 'mashkaamaria',
+            'last_msg': 'любим обожаем скорбим радуемся лучшая !!!!!!!! кто сомневается, '
+                    'тот пидр пидорок пидорас и просто гомосексуалист',
+            'img': 'https://sun1-21.userapi.com/s/v1/ig2/DPYDRjae_riTgMsLIQIJ2CDjIvebXm8M2N0jSfZJvcGXENxeq0NqhnRd60CSIItgu2c73s6ivRUNrDfkEC6twcdL.jpg?size=200x200&quality=95&crop=64,182,1429,1429&ava=1'
+        },
+        {
+            'name': 'mashkaamaria',
+            'last_msg': 'тоже маша, ну типа крутая она дохуя и зе бест оф бест, одного чата ей мало',
+            'img': 'https://sun1-21.userapi.com/s/v1/ig2/DPYDRjae_riTgMsLIQIJ2CDjIvebXm8M2N0jSfZJvcGXENxeq0NqhnRd60CSIItgu2c73s6ivRUNrDfkEC6twcdL.jpg?size=200x200&quality=95&crop=64,182,1429,1429&ava=1'
+        }
+    ]
+    return render_template('chats.html', chats=chats, **get_all_info(1))
 
 
 @app.route('/tasks')
@@ -290,6 +303,8 @@ def new_post():
 def set_like_for_post(post_id):
     cur_post = db_sess.query(Post).get(post_id)
     list_of_liked = cur_post.liked.split(',')
+    if not current_user.is_authenticated:
+        abort(401)
     if not str(current_user.id) in list_of_liked:
         list_of_liked.append(str(current_user.id))
     else:

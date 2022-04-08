@@ -1,3 +1,10 @@
 .head-name {
     font-size: 1.7em;
 }
+
+.chat-last-message {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    color: g
+}
