@@ -19,7 +19,9 @@ app.config['SECRET_KEY'] = 'diamond_app_socialnet_blogger'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-db_sess = None
+
+db_session.global_init()
+db_sess = db_session.create_session()
 
 
 @login_manager.user_loader
@@ -158,7 +160,7 @@ def chats():
         {
             'name': 'mashkaamaria',
             'last_msg': 'любим обожаем скорбим радуемся лучшая !!!!!!!! кто сомневается, '
-                    'тот пидр пидорок пидорас и просто гомосексуалист',
+                        'тот пидр пидорок пидорас и просто гомосексуалист',
             'img': 'https://sun1-21.userapi.com/s/v1/ig2/DPYDRjae_riTgMsLIQIJ2CDjIvebXm8M2N0jSfZJvcGXENxeq0NqhnRd60CSIItgu2c73s6ivRUNrDfkEC6twcdL.jpg?size=200x200&quality=95&crop=64,182,1429,1429&ava=1'
         },
         {
@@ -317,6 +319,6 @@ def set_like_for_post(post_id):
 
 
 if __name__ == '__main__':
-    db_session.global_init()
-    db_sess = db_session.create_session()
+    # db_session.global_init()
+    # db_sess = db_session.create_session()
     app.run(port=8000, host='127.0.0.1')
