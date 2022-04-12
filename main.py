@@ -1,5 +1,4 @@
 import os
-from random import randint, sample
 
 from flask import Flask, render_template, send_file, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -7,9 +6,11 @@ from werkzeug.exceptions import abort
 from werkzeug.utils import redirect, secure_filename
 
 from data import db_session
+from data.chats import Chat
 from data.posts import Post
 from data.users import User
 from forms.loginform import LoginForm
+from forms.new_chat_form import NewChatForm
 from forms.newpostform import NewPostForm
 from forms.registerform import RegisterForm
 

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid mt-5 d-flex justify-content-center">
+    <div class="col-8 border border-1 p-1">
+        <h1 align="center">Новый чат</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <p class="mb-0">
+                {{ form.text.label(class="ms-1") }} <a class="text-decoration-none text-danger">*</a><br>
+                {{ form.text(class="form-control") }}<br>
+                {% for error in form.text.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+            {% endfor %}
+            </p>
+
+
+            <p class="mb-0">
+                {{ form.user.label(class="ms-1") }} <a class="text-decoration-none text-danger">*</a><br>
+                {{ form.user(class="form-control") }}<br>
+                {% for error in form.user.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+            {% endfor %}
+            </p>
+            <p>
+                {{ form.submit(type="submit", class="btn btn-primary") }}
+                <a class="h5 text-decoration-none text-danger align-middle ms-2">{{message}}</a>
+            </p>
+
+        </form>
+    </div>
+</div>
+{% endblock %}
