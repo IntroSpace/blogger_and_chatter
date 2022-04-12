@@ -20,7 +20,6 @@ app.config['SECRET_KEY'] = 'diamond_app_socialnet_blogger'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
 db_session.global_init()
 db_sess = db_session.create_session()
 
@@ -299,6 +298,19 @@ def new_post():
         db_sess.commit()
         return redirect('/')
     return render_template('new_post.html', form=form)
+
+
+@login_required
+@app.route('/new_chat', methods=['GET', 'POST'])
+def new_chat():
+    form = NewChatForm()
+    if form.validate_on_submit():
+        chat = Chat(text=form.text.data,
+                    user=form.user.data)
+        db_sess.add(chat)
+        db_sess.commit()
+        return redirect('/chats')
+    return render_template('new_chat.html', form=form)
 
 
 @login_required
