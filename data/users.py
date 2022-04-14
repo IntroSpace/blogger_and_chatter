@@ -25,6 +25,7 @@ class User(SqlAlchemyBase, UserMixin):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     post = orm.relation("Post", back_populates='user')
+    comment = orm.relation("Comment", back_populates='user')
 
     def generate_blob(self, img):
         if not os.path.exists(os.path.join('static/img/avatars', img)):

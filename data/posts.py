@@ -1,5 +1,4 @@
 import os
-from PIL import Image
 
 import sqlalchemy
 from sqlalchemy import orm
@@ -18,6 +17,7 @@ class Post(SqlAlchemyBase):
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relation('User')
+    comment = orm.relation("Comment", back_populates='user')
 
     def generate_blob(self, img):
         if not os.path.exists(os.path.join('static/img/posts', img)):
