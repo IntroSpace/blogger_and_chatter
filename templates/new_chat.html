@@ -16,16 +16,8 @@
             </p>
             {% endfor %}
             </p>
-
-
-            <p class="mb-0">
-                {{ form.user.label(class="ms-1") }} <a class="text-decoration-none text-danger">*</a><br>
-                {{ form.user(class="form-control") }}<br>
-                {% for error in form.user.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-            {% endfor %}
+            <p>
+                {{ form.photo }}
             </p>
             <p>
                 {{ form.submit(type="submit", class="btn btn-primary") }}
