@@ -331,6 +331,11 @@ def set_like_for_post(post_id):
     })
 
 
+@app.route('/chat/<int:chat_id>')
+def one_chat(chat_id):
+    return render_template('one_chat.html', **get_all_info(0))
+
+
 if __name__ == '__main__':
     # db_session.global_init()
     # db_sess = db_session.create_session()
