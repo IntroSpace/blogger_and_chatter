@@ -17,7 +17,7 @@ class Post(SqlAlchemyBase):
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relation('User')
-    comment = orm.relation("Comment", back_populates='user')
+    comment = orm.relation("Comment", back_populates='post')
 
     def generate_blob(self, img):
         if not os.path.exists(os.path.join('static/img/posts', img)):
