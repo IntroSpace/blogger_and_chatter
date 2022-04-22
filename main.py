@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, send_file, jsonify
+from flask import Flask, render_template, send_file, jsonify, request
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect, secure_filename
@@ -278,6 +278,37 @@ def new_chat():
 @app.route('/chat/<int:chat_id>')
 def one_chat(chat_id):
     return render_template('one_chat.html', **get_all_info(0))
+
+
+@app.route('/blogs/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_news(id):
+    form = NewPostForm()
+    if request.method == "GET":
+        post = db_sess.query(Post).filter(Post.id == id,
+                                          Post.user == current_user
+                                          ).first()
+        if post:
+            form.text.data = post.text
+            form.file.data = post.visual_content
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        post = db_sess.query(Post).filter(Post.id == id,
+                                          Post.user == current_user
+                                          ).first()
+        if post:
+            post.text = form.text.data
+            filename = secure_filename(form.file.data.filename)
+            form.file.data.save(os.path.join('static/img/posts', filename))
+            post.generate_blob(filename)
+            db_sess.commit()
+            return redirect('/')
+        else:
+            abort(404)
+    return render_template('new_post.html',
+                           form=form
+                           )
 
 
 if __name__ == '__main__':
