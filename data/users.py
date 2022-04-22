@@ -24,6 +24,7 @@ class User(SqlAlchemyBase, UserMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
+    admin_status = sqlalchemy.Column(sqlalchemy.Integer, nullable=False, default=0)
     post = orm.relation("Post", back_populates='user')
     comment = orm.relation("Comment", back_populates='user')
 

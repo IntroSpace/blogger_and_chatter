@@ -6,7 +6,7 @@
         <div class="col-12 col-md-5 card shadow-sm p-0 border border-2 h-50">
             <div class="card-header">
                 <h5 card="card-title" style="margin-bottom: 0;">
-                    <a href="/profile/{{ blog.user.id }}">
+                    <a href="/profile/{{ blog.user.id }}" class="text-decoration-none">
                         <img style="width: 2rem;" src="/avatar/{{ blog.user.id }}" alt="..."
                              class="rounded-circle me-1 other-click"></a>
                     {{ blog.text }}
@@ -26,7 +26,7 @@
             </div>
             {% for comment in comments %}
             <h4>
-                <a href="/profile/{{ comment.user.id }}">
+                <a class="text-decoration-none" href="/profile/{{ comment.user.id }}">
                     <img style="width: 2rem;" src="/avatar/{{ comment.user.id }}" alt="..."
                          class="rounded-circle me-1 other-click"></a>
                 {{ comment.text }}</h4>

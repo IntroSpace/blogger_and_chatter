@@ -79,60 +79,10 @@ def get_all_info(current_pos):
 
 
 def get_all_blogs(extra_blog=None):
-    # all_blogs = [
-    #     {
-    #         'id': 1,
-    #         'text': 'post 1',
-    #         'avatar': 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-    #         'visual_content': 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
-    #         'liked': False
-    #     },
-    #     {
-    #         'id': 2,
-    #         'text': 'post 2',
-    #         'avatar': 'https://cdn-icons-png.flaticon.com/512/149/149452.png',
-    #         'liked': True
-    #     },
-    #     {
-    #         'id': 3,
-    #         'text': 'post 3',
-    #         'avatar': 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-    #         'visual_content': 'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMj
-    #         A3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
-    #         'liked': False
-    #     },
-    #     {
-    #         'id': 4,
-    #         'text': 'post 4',
-    #         'avatar': 'https://cdn-icons-png.flaticon.com/512/149/149995.png',
-    #         'liked': True
-    #     },
-    #     {
-    #         'id': 5,
-    #         'text': 'post 5',
-    #         'avatar': 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-    #         'visual_content': 'https://cdn.pixabay.com/photo/2017/02/08/17/24/fantasy-2049567__480.jpg',
-    #         'liked': False
-    #     },
-    #     {
-    #         'id': 6,
-    #         'text': 'post 6',
-    #         'avatar': 'https://cdn-icons-png.flaticon.com/512/149/149995.png',
-    #         'liked': True
-    #     },
-    #     {
-    #         'id': 7,
-    #         'text': 'post 7',
-    #         'avatar': 'https://cdn-icons-png.flaticon.com/512/149/149995.png',
-    #         'liked': True
-    #     }
-    # ]
     if extra_blog is not None:
         all_blogs = db_sess.query(Post).filter(Post.id != extra_blog.id).all()
     else:
         all_blogs = db_sess.query(Post).all()
-    # if extra_blog is not None:
-    #     all_blogs = list(filter(lambda x: x.get('id', -1) != extra_blog, all_blogs))
     return all_blogs
 
 
