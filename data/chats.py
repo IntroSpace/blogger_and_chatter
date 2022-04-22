@@ -7,3 +7,4 @@ class Chat(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
+    users = sqlalchemy.Column(sqlalchemy.String, nullable=True)

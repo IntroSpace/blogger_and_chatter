@@ -7,10 +7,12 @@ from werkzeug.utils import redirect, secure_filename
 
 from data import db_session
 from data.chats import Chat
+from data.comments import Comment
 from data.posts import Post
 from data.users import User
 from forms.loginform import LoginForm
 from forms.new_chat_form import NewChatForm
+from forms.new_comment_form import NewCommentForm
 from forms.newpostform import NewPostForm
 from forms.registerform import RegisterForm
 
@@ -146,11 +148,20 @@ def index():
     return render_template('index.html', blogs=all_blogs, **get_all_info(0), current_user=current_user)
 
 
-@app.route('/blog/<int:blog_id>')
+@app.route('/blog/<int:blog_id>', methods=['GET', 'POST'])
 def one_blog(blog_id):
+    form = NewCommentForm()
+    if form.validate_on_submit():
+        comment = Comment(text=form.text.data,
+                          post_id=blog_id,
+                          user_id=current_user.id)
+        db_sess.add(comment)
+        db_sess.commit()
+        return redirect(f'/blog/{blog_id}')
     cur_blog = get_one_blog(blog_id)
     all_blogs = get_all_blogs(extra_blog=cur_blog)
-    return render_template('one_blog.html', blog=cur_blog, recommend=all_blogs,
+    comments = db_sess.query(Comment).filter(Comment.post_id == blog_id).all()
+    return render_template('one_blog.html', blog=cur_blog, recommend=all_blogs, comments=comments, form=form,
                            **get_all_info(0))
 
 
