@@ -3,13 +3,18 @@
 {% block content %}
 <div class="container mt-2">
     <div class="row row-cols-4">
-        <div class="col-12 col-md-5 card shadow-sm p-0 border border-2 h-50">
+        <div class="col-12 col-md-5 card shadow-sm p-0 border border-2 h-50" id="blog-{{ blog.id }}">
             <div class="card-header">
                 <h5 card="card-title" style="margin-bottom: 0;">
                     <a href="/profile/{{ blog.user.id }}" class="text-decoration-none">
                         <img style="width: 2rem;" src="/avatar/{{ blog.user.id }}" alt="..."
                              class="rounded-circle me-1 other-click"></a>
                     {{ blog.text }}
+                    {% if current_user.admin_status > 0 %}
+                        <a class="float-end text-decoration-none other-click" onclick="deleteOneBlogPost({{ blog.id }})">
+                            <img src="/static/img/trash.png" alt="del" style="width: 1.3rem;" class="img-responsive other-click">
+                        </a>
+                    {% endif %}
                 </h5>
             </div>
             <div class="card-body p-0">
@@ -56,12 +61,17 @@
             <ul class="list-group mb-0 mb-md-1">
                 {% for i in recommend %}
                 <li class="list-group-item card shadow-sm p-0 border border-1 mb-1"
-                    onclick="onclickListener('{{i.id}}');">
+                    onclick="onclickListener('{{i.id}}');" id="blog-{{ i.id }}">
                     <div class="card-header">
                         <h5 card="card-title" style="margin-bottom: 0;">
                             <img style="width: 2rem;" src="/avatar/{{ i.user.id }}" alt="..."
                                  class="rounded-circle me-1 other-click">
                             {{ i.text }}
+                            {% if current_user.admin_status > 0 %}
+                                <a class="float-end text-decoration-none other-click" onclick="deleteBlogPost({{ i.id }})">
+                                    <img src="/static/img/trash.png" alt="del" style="width: 1.3rem;" class="img-responsive other-click">
+                                </a>
+                            {% endif %}
                         </h5>
                     </div>
                     <div class="card-body p-0">

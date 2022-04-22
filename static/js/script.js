@@ -14,9 +14,21 @@ function changeLikedOfBlog(i) {
 };
 function deleteBlogPost(i) {
     cur_blog = document.getElementById("blog-" + i);
-    fetch('/api/blogs/admin/del/' + i).then(function(response) {
+    fetch('/api/blogs/admin/del/' + i, {
+        method: 'DELETE',
+    }).then(function(response) {
       if (response.status == 200) {
-        document.getElementById('blog-1').remove()
+        document.getElementById('blog-' + i).remove()
+      }
+    });
+};
+function deleteOneBlogPost(i) {
+    cur_blog = document.getElementById("blog-" + i);
+    fetch('/api/blogs/admin/del/' + i, {
+        method: 'DELETE',
+    }).then(function(response) {
+      if (response.status == 200) {
+        window.location.pathname='/index';
       }
     });
 };
