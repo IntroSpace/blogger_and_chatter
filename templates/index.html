@@ -20,6 +20,11 @@
                             <img src="/static/img/trash.png" alt="del" style="width: 1.3rem;" class="img-responsive other-click">
                         </a>
                     {% endif %}
+                    {% if (current_user.is_authenticated and blog.user.id == current_user.id) %}
+                        <a class="float-end text-decoration-none other-click me-1 me-md-2" onclick="editBlogPost({{ blog.id }})">
+                            <img src="/static/img/edit.png" alt="del" style="width: 1.3rem;" class="img-responsive other-click">
+                        </a>
+                    {% endif %}
                 </h5>
             </div>
 

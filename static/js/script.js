@@ -37,3 +37,6 @@ function onclickListener(blog_id) {
         window.location.pathname='/blog/' + blog_id;
     }
 }
+function editBlogPost(blog_id) {
+    window.location.pathname='/blog/edit/' + blog_id;
+}
