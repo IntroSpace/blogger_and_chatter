@@ -280,10 +280,11 @@ def one_chat(chat_id):
     return render_template('one_chat.html', **get_all_info(0))
 
 
-@app.route('/blogs/edit/<int:id>', methods=['GET', 'POST'])
+@app.route('/blog/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_news(id):
     form = NewPostForm()
+    form.submit.label.text = 'edit'
     if request.method == "GET":
         post = db_sess.query(Post).filter(Post.id == id,
                                           Post.user == current_user
@@ -306,7 +307,7 @@ def edit_news(id):
             return redirect('/')
         else:
             abort(404)
-    return render_template('new_post.html',
+    return render_template('edit_post.html',
                            form=form
                            )
 
