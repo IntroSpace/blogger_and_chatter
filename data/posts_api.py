@@ -14,13 +14,13 @@ blueprint = flask.Blueprint(
 
 
 @login_required
-@blueprint.route('/api/blogs/admin/del/<int:blog_id>', methods=['DELETE'])
+@blueprint.route('/api/blogs/del/<int:blog_id>', methods=['DELETE'])
 def delete_blog(blog_id):
-    if current_user.admin_status > 0:
-        db_sess = db_session.create_session()
-        blog = db_sess.query(Post).get(blog_id)
-        if not blog:
-            return jsonify({'error': 'Not found'})
+    db_sess = db_session.create_session()
+    blog = db_sess.query(Post).get(blog_id)
+    if not blog:
+        return jsonify({'error': 'Not found'})
+    if current_user.admin_status > 0 or blog.user_id == current_user.id:
         db_sess.delete(blog)
         db_sess.commit()
         return jsonify({'success': 'OK'})

@@ -14,7 +14,7 @@ function changeLikedOfBlog(i) {
 };
 function deleteBlogPost(i) {
     cur_blog = document.getElementById("blog-" + i);
-    fetch('/api/blogs/admin/del/' + i, {
+    fetch('/api/blogs/del/' + i, {
         method: 'DELETE',
     }).then(function(response) {
       if (response.status == 200) {
@@ -24,7 +24,7 @@ function deleteBlogPost(i) {
 };
 function deleteOneBlogPost(i) {
     cur_blog = document.getElementById("blog-" + i);
-    fetch('/api/blogs/admin/del/' + i, {
+    fetch('/api/blogs/del/' + i, {
         method: 'DELETE',
     }).then(function(response) {
       if (response.status == 200) {
