@@ -5,7 +5,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect, secure_filename
 
-from data import db_session
+from data import db_session, posts_api
 from data.chats import Chat
 from data.comments import Comment
 from data.posts import Post
@@ -275,24 +275,6 @@ def new_chat():
     return render_template('new_chat.html', form=form)
 
 
-@login_required
-@app.route('/api/blogs/change_like/<post_id>')
-def set_like_for_post(post_id):
-    cur_post = db_sess.query(Post).get(post_id)
-    list_of_liked = cur_post.liked.split(',')
-    if not current_user.is_authenticated:
-        abort(401)
-    if not str(current_user.id) in list_of_liked:
-        list_of_liked.append(str(current_user.id))
-    else:
-        del list_of_liked[list_of_liked.index(str(current_user.id))]
-    cur_post.liked = ','.join(list_of_liked)
-    db_sess.commit()
-    return jsonify({
-        'result': 'success'
-    })
-
-
 @app.route('/chat/<int:chat_id>')
 def one_chat(chat_id):
     return render_template('one_chat.html', **get_all_info(0))
@@ -301,4 +283,5 @@ def one_chat(chat_id):
 if __name__ == '__main__':
     # db_session.global_init()
     # db_sess = db_session.create_session()
+    app.register_blueprint(posts_api.blueprint)
     app.run(port=8000, host='127.0.0.1')
