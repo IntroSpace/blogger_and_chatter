@@ -188,11 +188,12 @@ def tasks():
     return render_template('tasks.html', **get_all_info(2))
 
 
-@app.route('/profile')
+@app.route('/profile/<int:user_id>')
 @login_required
-def personal_profile():
-    all_blogs = db_sess.query(Post).filter(Post.user_id == current_user.id)
-    return render_template('profile.html', **get_all_info(-1), recommend=all_blogs)
+def personal_profile(user_id):
+    user = db_sess.query(User).get(user_id)
+    all_blogs = db_sess.query(Post).filter(Post.user_id == user_id)
+    return render_template('profile.html', **get_all_info(-1), recommend=all_blogs, user=user)
     # all_blogs = get_all_blogs()
     # return render_template('profile.html', **get_all_info(-1), recommend=sample(all_blogs, randint(1, 3)))
 

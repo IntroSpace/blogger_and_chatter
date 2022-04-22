@@ -30,7 +30,7 @@
             </div>
             <div class="header-right">
                 {% if current_user.is_authenticated %}
-                    <a class="nav-link me-0 me-md-1 me-lg-2 ps-1 ps-lg-2" href="/profile">
+                    <a class="nav-link me-0 me-md-1 me-lg-2 ps-1 ps-lg-2" href="/profile/{{ current_user.id }}">
                         <img src="/avatar/{{ current_user.id }}" alt="user" style="width: 3.4rem;" class="img-responsive rounded-circle border border-3 float-end">
                     </a>
                 {% else %}

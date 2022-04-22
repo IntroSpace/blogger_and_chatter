@@ -5,10 +5,12 @@
       <div class="col-12 col-md-10 col-lg-8 card shadow-sm p-0 border border-2">
           <div class="card-header">
               <h5 card="card-title" class="float-start" style="margin-bottom: 0;">
-                  <img style="width: 3rem;" src="/avatar/{{ current_user.id }}" alt="..." class="rounded-circle me-1 other-click">
-                  {{current_user.surname}} {{ current_user.name }}
+                  <img style="width: 3rem;" src="/avatar/{{ user.id }}" alt="..." class="rounded-circle me-1 other-click">
+                  {{ user.surname}} {{ user.name }}
               </h5>
-              <a href="/logout" class="text-decoration-none float-end h6">Log out</a>
+              {% if current_user.id == user.id %}
+                <a href="/logout" class="text-decoration-none float-end h6">Log out</a>
+              {% endif %}
           </div>
           <div class="card-body p-2">
             <div class="card-text">
