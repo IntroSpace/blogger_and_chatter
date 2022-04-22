@@ -8,14 +8,18 @@
     {% endif %}
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gy-1">
       {% for blog in blogs %}
-        <div class="col card shadow-sm p-0 border border-2" onclick="onclickListener('{{blog.id}}');">
+        <div id="blog-{{ blog.id }}" class="col card shadow-sm p-0 border border-2" onclick="onclickListener('{{blog.id}}');">
             <div class="card-header">
                 <h5 card="card-title" style="margin-bottom: 0;">
                     <a class="text-decoration-none" href="/profile/{{ blog.user.id }}">
                     <img style="width: 2rem;" src="/avatar/{{ blog.user.id }}" alt="..." class="rounded-circle me-1 other-click">
                         </a>
                     {{ blog.text }}
-                    <a class="float-end text-decoration-none other-click">del</a>
+                    {% if current_user.admin_status > 0 %}
+                        <a class="float-end text-decoration-none other-click" onclick="deleteBlogPost({{ blog.id }})">
+                            <img src="/static/img/trash.png" alt="del" style="width: 1.3rem;" class="img-responsive other-click">
+                        </a>
+                    {% endif %}
                 </h5>
             </div>
 

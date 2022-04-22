@@ -12,6 +12,14 @@ function changeLikedOfBlog(i) {
       }
     });
 };
+function deleteBlogPost(i) {
+    cur_blog = document.getElementById("blog-" + i);
+    fetch('/api/blogs/admin/del/' + i).then(function(response) {
+      if (response.status == 200) {
+        document.getElementById('blog-1').remove()
+      }
+    });
+};
 function onclickListener(blog_id) {
     if (!document.elementFromPoint(event.clientX, event.clientY).classList.contains('other-click')) {
         window.location.pathname='/blog/' + blog_id;
