@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-5 d-flex justify-content-center">
+    <div class="col-8 border border-1 p-1">
+        <h1 align="center">{{ error_main }}</h1>
+        <h5 class="ms-1">{{ error_desc }}</h5>
+        <img src="/static/img/oops_error.png" alt="oops error..." class="container-fluid">
+    </div>
+</div>
+{% endblock %}

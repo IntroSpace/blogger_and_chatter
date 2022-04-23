@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, render_template, send_file, jsonify, request
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from werkzeug.exceptions import abort
+from werkzeug.exceptions import abort, HTTPException
 from werkzeug.utils import redirect, secure_filename
 
 from data import db_session, posts_api
@@ -314,6 +314,19 @@ def edit_news(blog_id, iframe=False):
 @login_required
 def edit_news_with_iframe(blog_id):
     return edit_news(blog_id, iframe=True)
+
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    if isinstance(e, HTTPException):
+        error_main = f"Ошибка {e.code}: {e.name}"
+        error_desc = e.description
+    else:
+        error_main = "Внимание, произошла ошибка на сервере"
+        error_desc = "Мы уже работаем над её исправлением"
+
+    return render_template("other_error_page.html", title="Ошибка",
+                           error_main=error_main, error_desc=error_desc, **get_all_info(-1))
 
 
 if __name__ == '__main__':
