@@ -40,3 +40,9 @@ function onclickListener(blog_id) {
 function editBlogPost(blog_id) {
     window.location.pathname='/blog/edit/' + blog_id;
 }
+
+function checkClosing () {
+    if (!document.getElementById('iframe').contentWindow.location.pathname.match("/iframed/blog/edit/")) {
+        window.location.reload();
+    }
+}

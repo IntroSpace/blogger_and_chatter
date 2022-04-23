@@ -13,6 +13,7 @@
         {% block head_html %}{% endblock %}
     </head>
     <body>
+    {% if not iframe %}
     <header class="sticky-top">
         <nav class="navbar navbar-expand navbar-light bg-light">
             <div class="collapse navbar-collapse">
@@ -41,6 +42,7 @@
             </div>
         </nav>
     </header>
+    {% endif %}
     <!-- Begin page content -->
     <main role="main" class="container-fluid">
         {% block content %}{% endblock %}

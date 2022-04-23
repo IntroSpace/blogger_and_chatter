@@ -20,11 +20,11 @@
             <p>
                 {{ form.file(class="form-control", id="formFile") }}
             </p>
-            <div id="previewFile" align="center">
+            <div id="previewFile" class="container-fluid" align="center">
                 <p>No files currently selected for upload</p>
             </div>
             <p>
-                {{ form.submit(type="submit", class="btn btn-primary container-fluid") }}
+                {{ form.submit(type="submit", class="btn btn-primary container-fluid", onclick="alert('test')") }}
                 <a class="h5 text-decoration-none text-danger align-middle ms-2">{{message}}</a>
             </p>
 

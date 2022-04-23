@@ -18,6 +18,7 @@ function updateImageDisplay() {
         var image = document.createElement('img');
         image.src = window.URL.createObjectURL(curFiles[i]);
         image.classList.add("mb-3")
+        image.classList.add("container-fluid")
         preview.appendChild(image);
       } else {
         para.textContent = 'Not a valid file type. Update your selection.';

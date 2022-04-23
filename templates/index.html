@@ -42,6 +42,25 @@
             </div>
         </div>
       {% endfor %}
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPostModal">
+          Edit
+      </button>
+      <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-fullscreen-sm-down modal-lg modal-dialog-scrollable">
+              <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editPostModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <iframe id="iframe" src="/iframed/blog/edit/1" class="container-fluid" scrolling="no" style="height: 100vh" onload="checkClosing()"></iframe>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
   </div>
 </div>
 {% endblock %}

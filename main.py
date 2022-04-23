@@ -259,7 +259,7 @@ def new_post():
         db_sess.add(post)
         db_sess.commit()
         return redirect('/')
-    return render_template('new_post.html', form=form)
+    return render_template('new_post.html', form=form, **get_all_info(-1))
 
 
 @login_required
@@ -272,7 +272,7 @@ def new_chat():
         db_sess.add(chat)
         db_sess.commit()
         return redirect('/chats')
-    return render_template('new_chat.html', form=form)
+    return render_template('new_chat.html', form=form, **get_all_info(-1))
 
 
 @app.route('/chat/<int:chat_id>')
@@ -282,7 +282,7 @@ def one_chat(chat_id):
 
 @app.route('/blog/edit/<int:blog_id>', methods=['GET', 'POST'])
 @login_required
-def edit_news(blog_id):
+def edit_news(blog_id, iframe=False):
     form = NewPostForm()
     form.submit.label.text = 'edit'
     if request.method == "GET":
@@ -307,7 +307,13 @@ def edit_news(blog_id):
         else:
             abort(404)
     return render_template('edit_post.html',
-                           form=form, blog_id=str(blog_id))
+                           form=form, iframe=iframe, blog_id=str(blog_id), **get_all_info(-1))
+
+
+@app.route('/iframed/blog/edit/<int:blog_id>', methods=['GET', 'POST'])
+@login_required
+def edit_news_with_iframe(blog_id):
+    return edit_news(blog_id, iframe=True)
 
 
 if __name__ == '__main__':
