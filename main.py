@@ -280,22 +280,21 @@ def one_chat(chat_id):
     return render_template('one_chat.html', **get_all_info(0))
 
 
-@app.route('/blog/edit/<int:id>', methods=['GET', 'POST'])
+@app.route('/blog/edit/<int:blog_id>', methods=['GET', 'POST'])
 @login_required
-def edit_news(id):
+def edit_news(blog_id):
     form = NewPostForm()
     form.submit.label.text = 'edit'
     if request.method == "GET":
-        post = db_sess.query(Post).filter(Post.id == id,
+        post = db_sess.query(Post).filter(Post.id == blog_id,
                                           Post.user == current_user
                                           ).first()
         if post:
             form.text.data = post.text
-            form.file.data = post.visual_content
         else:
             abort(404)
     if form.validate_on_submit():
-        post = db_sess.query(Post).filter(Post.id == id,
+        post = db_sess.query(Post).filter(Post.id == blog_id,
                                           Post.user == current_user
                                           ).first()
         if post:
@@ -308,8 +307,7 @@ def edit_news(id):
         else:
             abort(404)
     return render_template('edit_post.html',
-                           form=form
-                           )
+                           form=form, blog_id=str(blog_id))
 
 
 if __name__ == '__main__':

@@ -17,16 +17,19 @@
             {% endfor %}
             </p>
 
-
             <p>
-                {{ form.file }}
+                {{ form.file(class="form-control", id="formFile") }}
             </p>
+            <div id="previewFile" align="center">
+                <p>No files currently selected for upload</p>
+            </div>
             <p>
-                {{ form.submit(type="submit", class="btn btn-primary") }}
+                {{ form.submit(type="submit", class="btn btn-primary container-fluid") }}
                 <a class="h5 text-decoration-none text-danger align-middle ms-2">{{message}}</a>
             </p>
 
         </form>
     </div>
 </div>
+<script src="/static/js/script_form_files.js"></script>
 {% endblock %}
