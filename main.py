@@ -319,14 +319,16 @@ def edit_news_with_iframe(blog_id):
 @app.errorhandler(Exception)
 def handle_exception(e):
     if isinstance(e, HTTPException):
+        code = e.code
         error_main = f"Ошибка {e.code}: {e.name}"
         error_desc = e.description
     else:
         error_main = "Внимание, произошла ошибка на сервере"
         error_desc = "Мы уже работаем над её исправлением"
+        code = 500
 
     return render_template("other_error_page.html", title="Ошибка",
-                           error_main=error_main, error_desc=error_desc, **get_all_info(-1))
+                           error_main=error_main, error_desc=error_desc, **get_all_info(-1)), code
 
 
 if __name__ == '__main__':
