@@ -120,13 +120,7 @@ def chats():
     chats = [
         {
             'name': 'mashkaamaria',
-            'last_msg': 'любим обожаем скорбим радуемся лучшая !!!!!!!! кто сомневается, '
-                        'тот пидр пидорок пидорас и просто гомосексуалист',
-            'img': 'https://sun1-21.userapi.com/s/v1/ig2/DPYDRjae_riTgMsLIQIJ2CDjIvebXm8M2N0jSfZJvcGXENxeq0NqhnRd60CSIItgu2c73s6ivRUNrDfkEC6twcdL.jpg?size=200x200&quality=95&crop=64,182,1429,1429&ava=1'
-        },
-        {
-            'name': 'mashkaamaria',
-            'last_msg': 'тоже маша, ну типа крутая она дохуя и зе бест оф бест, одного чата ей мало',
+            'last_msg': 'привеет!',
             'img': 'https://sun1-21.userapi.com/s/v1/ig2/DPYDRjae_riTgMsLIQIJ2CDjIvebXm8M2N0jSfZJvcGXENxeq0NqhnRd60CSIItgu2c73s6ivRUNrDfkEC6twcdL.jpg?size=200x200&quality=95&crop=64,182,1429,1429&ava=1'
         }
     ]
